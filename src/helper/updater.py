@@ -5,6 +5,17 @@ import json
 from helper.build_menu_message import build_message
 from helper.config import config
 from telegram.ext import Updater, CallbackContext
+from datetime import datetime, time
+
+
+def is_time_between(begin_time, end_time, check_time=None):
+    # If check time is not given, default to current UTC time
+    check_time = check_time or datetime.utcnow().time()
+    if begin_time < end_time:
+        return check_time >= begin_time and check_time <= end_time
+    else:  # crosses midnight
+        return check_time >= begin_time or check_time <= end_time
+
 
 TOKEN = config.env["TELEGRAM_TOKEN"]
 
@@ -46,7 +57,8 @@ async def update(context: CallbackContext):
                     detailed_message = build_message(canteen_name, menu, True)
                     users = users_db.get_by_canteen(canteen_id)
 
-                    for user in users:
-                        await notify_user(context, user, message, detailed_message)
+                    if is_time_between(time(9, 0), time(15, 0), datetime.now().time()):
+                        for user in users:
+                            await notify_user(context, user, message, detailed_message)
         except:
             continue
