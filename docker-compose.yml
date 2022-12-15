@@ -3,7 +3,7 @@ services:
 
   db:
     image: postgres:12.2
-    container_name: stw-mensa-bot-db
+    container_name: stw-mensa-robot-db
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -17,6 +17,7 @@ services:
   bot:
     build: ./bot
     restart: always
+    container_name: stw-mensa-robot
     depends_on:
       - db
     environment:
