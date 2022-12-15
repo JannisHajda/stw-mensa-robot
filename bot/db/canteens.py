@@ -1,13 +1,12 @@
 from db.db import db
 
-
 def list():
     cur = db.conn.cursor()
     cur.execute("SELECT * FROM canteens")
     canteens = cur.fetchall()
     cur.close()
     return canteens
-
+    
 
 def get(id):
     cur = db.conn.cursor()
