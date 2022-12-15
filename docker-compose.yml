@@ -1,0 +1,23 @@
+version: '3.7'
+services: 
+
+  db:
+    image: postgres:12.2
+    container_name: stw-mensa-bot-db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  bot:
+    build: ./bot
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=db
